@@ -1,20 +1,38 @@
 const app = require('express')();
 const superRouter = require('./routes')
+const http = require('http');
+require('dotenv').config();
+const client = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+const MessagingResponse = require('twilio').twiml.MessagingResponse;
+const _ = require('lodash');
+const { Message } = require('twilio/lib/twiml/MessagingResponse');
 
-const accountSid = process.env.TWILIO_ACCOUNT_SID;
-const authToken = process.env.TWILIO_AUTH_TOKEN;
-const client = require('twilio')(accountSid, authToken);
-
-client.messages
+/*
+app.get('/', function(req, res) {
+    client.messages
       .create({
          from: 'whatsapp:+14155238886',
-         body: 'Hello there!',
+         body: 'I opened the first beer',
          to: 'whatsapp:+34652568088'
        })
       .then(message => console.log(message.sid));
+    res.status(200).send("message sent")
+});
+*/
+
+
+app.post('/beer', (req, res) => {
+    console.log(req.body)
+    const twiml = new MessagingResponse();
+    twiml.message('beer');
+    res.writeHead(200, {'Content-Type': 'text/xml'});
+    res.end(twiml.toString());
+  });
 
 app.get('/', function(req, res) {
-    res.status(200).send("Server is running")
+    const response = new MessagingResponse();
+    response.message(`Beer`)
+    res.status(200).send("beer sent")
 });
 
 app.use('/route', superRouter);
