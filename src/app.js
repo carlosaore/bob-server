@@ -5,6 +5,6 @@ app.get('/', function(req, res) {
     res.status(200).send("Server is running")
 });
 
-app.use('/superMiddleware', superRouter);
+app.use('/route', superRouter);
  
 module.exports = app;
