@@ -1,18 +1,17 @@
 const app = require('express')();
 const superRouter = require('./routes')
-const http = require('http');
 require('dotenv').config();
-const client = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+//const client = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 const MessagingResponse = require('twilio').twiml.MessagingResponse;
-const _ = require('lodash');
 const bodyParser = require('body-parser');
+const sendToChief = require('./routes/sendtochief');
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
 /*
 app.get('/', function(req, res) {
-    client.messages
+    client.messages 
       .create({
          from: 'whatsapp:+14155238886',
          body: 'I opened the first beer',
@@ -22,8 +21,11 @@ app.get('/', function(req, res) {
     res.status(200).send("message sent")
 });
 */
+//https://www.twilio.com/blog/send-images-whatsapp-node-js
 
+app.use('/sendtochief', sendToChief);
 
+/*
 app.post('/beer', (req, res) => {
     let quantity = Number(req.body.Body.replace(/\D/g,''));
     quantity = quantity < 10 ? quantity : 10;
@@ -35,10 +37,34 @@ app.post('/beer', (req, res) => {
     res.writeHead(200, {'Content-Type': 'text/xml'});
     res.end(twiml.toString());
   });
+
 /*
 app.get('/', function(req, res) {
-    const response = new MessagingResponse();
-    response.message(`Beer`)
+    client.messages 
+      .create({
+         from: 'whatsapp:+14155238886',
+         body: 'sent you a beer from a get request',
+         to: 'whatsapp:+34652568088'
+       })
+      .then(message => console.log(message));
+    //res.status(200).send("message sent")
+    //const response = new MessagingResponse();
+   // response.message(`Beer`)
+    res.status(200).send("beer sent")
+});
+
+app.post('/send', function(req, res) {
+    const amount = Number(req.body.amount);
+    const sender = req.body.sender
+
+    client.messages 
+      .create({
+         from: 'whatsapp:+14155238886',
+         body: `${sender} sent you ${amount} beers from a post request`,
+         to: 'whatsapp:+34652568088'
+       });
+    //const response = new MessagingResponse();
+   // response.message(`Beer`)
     res.status(200).send("beer sent")
 });
 */
