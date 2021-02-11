@@ -35,30 +35,31 @@ router.use(function (req, res, next) {
 // Check that required key-values contains correct data
 // "name" will always be a string but "to" needs to be a phone number un twillio syntax
 router.use(function (req, res, next) {
-    const regex = new 
-    if (req.body.to.match ) {
+    const regex = new RegExp("(whatsapp:\+)(\d*)");
+    if (!regex.test(req.body.to)) {
         res.status(400).json({
-            error : "missing data"
+            error : "inccorect data"
         })
     };
     next();
 });
 
-
-
 // Decode message
 
-// Concatenate message
+// Stringify message
+router.use(function (req, res, next) {
+    req.message = JSON.stringify(req.body);
+    next();
+});
 
 //POST to send message through twillio
 router.post('/', function(req, res) {
     client.messages 
       .create({
          from: 'whatsapp:+14155238886',
-         body: 'sent you a beer from a get request',
+         body: req.message,
          to: 'whatsapp:+34652568088'
-       })
-      .then(message => console.log(message));
+       });
     //res.status(200).send("message sent")
     //const response = new MessagingResponse();
    // response.message(`Beer`)
