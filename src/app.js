@@ -2,9 +2,10 @@ const app = require('express')();
 const superRouter = require('./routes')
 require('dotenv').config();
 //const client = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
-const MessagingResponse = require('twilio').twiml.MessagingResponse;
+//const MessagingResponse = require('twilio').twiml.MessagingResponse;
 const bodyParser = require('body-parser');
 const sendToChief = require('./routes/sendtochief');
+const sendToFam = require('./routes/sendtofam');
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -24,7 +25,7 @@ app.get('/', function(req, res) {
 //https://www.twilio.com/blog/send-images-whatsapp-node-js
 
 app.use('/sendtochief', sendToChief);
-
+app.use('/sendtofam', sendToFam);
 /*
 app.post('/beer', (req, res) => {
     let quantity = Number(req.body.Body.replace(/\D/g,''));
