@@ -24,7 +24,7 @@ router.use(function (req, res, next) {
 
 // Check that body contains required key-values
 router.use(function (req, res, next) {
-    if (req.body.name || req.body.to || req.body.message) {
+    if (!req.body.name || !req.body.to || !req.body.message) {
         res.status(400).json({
             error : "missing data"
         })
@@ -60,10 +60,7 @@ router.post('/', function(req, res) {
          body: req.message,
          to: 'whatsapp:+34652568088'
        });
-    //res.status(200).send("message sent")
-    //const response = new MessagingResponse();
-   // response.message(`Beer`)
-    res.status(200).send("beer sent")
+    res.status(200).json({message : "message sent"})
     }
 )
 // Both functions send a message back
