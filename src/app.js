@@ -3,8 +3,6 @@ require('dotenv').config();
 //const client = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 const MessagingResponse = require('twilio').twiml.MessagingResponse;
 const bodyParser = require('body-parser');
-const sendToChief = require('./routes/sendtochief');
-const sendToFam = require('./routes/sendtofam');
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
