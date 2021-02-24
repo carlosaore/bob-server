@@ -4,6 +4,8 @@ const app = express();
 const router = express.Router()
 const client = require('twilio')(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
 const bodyParser = require('body-parser');
+const encoder = require('../../../encoderDecoder');
+const caesar = require('../../../encoderDecoder');
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -38,7 +40,7 @@ router.use(function (req, res, next) {
     const regex = new RegExp("(whatsapp:\+)(\d*)");
     if (!regex.test(req.body.to)) {
         res.status(400).json({
-            error : "inccorect data"
+            error : "incorrect data"
         })
     };
     next();
@@ -54,11 +56,17 @@ router.use(function (req, res, next) {
 
 //POST to send message through twillio
 router.post('/', function(req, res) {
+    let encondedText = req.body.message;
+    encondedText = caesar(encondedText,7);
+    encondedText = encondedText.replace(/ /g,"%20");
+    const url = `https://api.qrserver.com/v1/create-qr-code/?data=${encondedText}&amp;size=100x100`;
+
     client.messages 
       .create({
          from: 'whatsapp:+14155238886',
          body: req.message,
-         to: 'whatsapp:+34652568088'
+         to: 'whatsapp:+34652568088',
+         mediaUrl: url
        });
     res.status(200).json({message : "message sent"})
     }
