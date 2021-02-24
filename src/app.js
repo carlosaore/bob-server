@@ -12,9 +12,6 @@ app.get('/', function(req, res) {
     res.status(200).send("API running")
 });
 
-app.use('/sendtochief', sendToChief);
-app.use('/sendtofam', sendToFam);
-
 app.post('/beer', (req, res) => {
     let quantity = Number(req.body.Body.replace(/\D/g,''));
     quantity = quantity < 10 ? quantity : 10;
